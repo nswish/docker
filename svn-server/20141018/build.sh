@@ -1,0 +1,2 @@
+#!/bin/sh
+docker build --force-rm=true --rm=true -t nswish/svn:20141018 .
