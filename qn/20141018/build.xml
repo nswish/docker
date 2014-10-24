@@ -24,7 +24,7 @@
 
 	<target name="svn">
 		<exec executable="svn">
-			<arg line="co svn://bsc.jiani.info/qn/trunk qn"/>
+			<arg line="co svn://172.17.42.1/qn/trunk qn"/>
 		</exec>
 	</target>
 

@@ -1,1 +1,1 @@
-sudo docker run --name qn -d -p 8080:8080 -e "default.url=jdbc:mysql://172.17.0.36:3306/qnc" -e "default.username=qnc" -e "default.password=qnc" nswish/qn:20141018
+docker run --name qn -d -p 80:8080 -e "default.url=jdbc:mysql://10.80.10.7:30007/qnc?useUnicode=true&characterEncoding=utf-8" -e "default.username=qnc" -e "default.password=qnc" nswish/qn:20141018
