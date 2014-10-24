@@ -11,6 +11,8 @@ RUN useradd tomcat -m \
 
 ADD apache-tomcat-7.0.56.tar.gz /home/tomcat
 
+RUN sed -i '72 i URIEncoding="UTF-8"' /home/tomcat/apache-tomcat-7.0.56/conf/server.xml
+
 RUN chown -R tomcat:tomcat /home/tomcat/apache-tomcat-7.0.56
 
 EXPOSE 8080
