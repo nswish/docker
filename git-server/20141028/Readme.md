@@ -17,3 +17,7 @@
 5. 克隆远程仓库
 
    git clone git@server:/sample.git
+
+6. git服务开启
+
+   git-daemon --export-all --verbose /home/git/qn.git

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="qn cloud" default="all" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<path id="classpath">
+                <pathelement location="apache-tomcat-7.0.56/lib/jsp-api.jar"/>
+		<pathelement location="apache-tomcat-7.0.56/lib/servlet-api.jar"/>
+                <fileset dir="qn/web/WEB-INF/lib">
+                        <include name="*.jar"/>
+                </fileset>
+        </path>
+
+	<target name="all">
+		<antcall target="clean"/>
+		<antcall target="git"/> 
+		<antcall target="compile"/>
+		<antcall target="stopServer"/>
+		<antcall target="deploy"/>
+		<antcall target="startServer"/>
+	</target>
+
+        <target name="clean">
+        	<delete dir="qn/web/WEB-INF/classes"/>
+        </target>
+
+	<target name="git">
+	        <available file="qn" type="dir" property="qn.exists"/>
+	       	<exec executable="git" unless:true="${qn.exists}">
+	               	<arg line="clone git://git-server/home/git/qn.git"/>
+	        </exec>
+	       	<exec executable="git" if:true="${qn.exists}" dir="qn">
+	       		<arg line="pull origin master"/>
+	        </exec>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="qn/web/WEB-INF/classes" />
+		<javac encoding="utf-8" srcdir="qn/src" destdir="qn/web/WEB-INF/classes" deprecation="on" fork="true" memoryInitialSize="521m" memoryMaximumSize="1024m"
+		 	debug="true" target="1.7" source="1.7" classpathref="classpath" />
+		<copy todir="qn/web/WEB-INF/classes">
+                        <fileset dir="qn/src">
+                                <include name="*.properties"/>
+                        </fileset>
+                </copy>
+	</target> 
+
+	<target name="stopServer">
+		<exec executable="sudo" inputstring="tomcat&#10;">
+			<arg line="-S supervisorctl stop tomcat7" />
+		</exec>
+	</target>
+
+	<target name="deploy">
+		<delete dir="apache-tomcat-7.0.56/webapps/qn" />
+		<copydir src="qn/web" dest="apache-tomcat-7.0.56/webapps/qn" />
+	</target>
+
+	<target name="startServer">
+		<exec executable="sudo" inputstring="tomcat&#10;">
+			<arg line="-S supervisorctl start tomcat7" />
+		</exec>
+	</target>
+</project>
+
