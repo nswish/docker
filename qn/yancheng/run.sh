@@ -1,0 +1,1 @@
+docker run --name yancheng --link git:git-server -d -p 8081:8080 -e "DEFAULT_DB_URL=jdbc:mysql://10.80.10.7:30007/yancheng?useUnicode=true&characterEncoding=utf-8" -e "DEFAULT_DB_USERNAME=yancheng" -e "DEFAULT_DB_PASSWORD=yancheng" nswish/qn:yancheng
