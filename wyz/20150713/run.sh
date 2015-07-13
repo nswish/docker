@@ -1,0 +1,1 @@
+docker run --name wyz --link git:git-server -d -p 8085:8080 -e "DEFAULT_DB_URL=jdbc:mysql://10.80.10.7:30007/wyz?useUnicode=true&characterEncoding=utf-8" -e "DEFAULT_DB_USERNAME=wyz" -e "DEFAULT_DB_PASSWORD=wyz" nswish/wyz:20150713

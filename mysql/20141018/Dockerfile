@@ -1,6 +1,7 @@
 FROM nswish/supervisor:20141018
 
-RUN apt-get install -y mysql-server \
+RUN apt-get update \
+ && apt-get install -y mysql-server \
  && printf "\n[program:mysqld]\ncommand=mysqld\n" >> /etc/supervisor/conf.d/supervisord.conf
 
 ADD ./my.cnf /etc/mysql/my.cnf

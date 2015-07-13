@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="qnc cloud" default="all" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<path id="classpath">
+		<pathelement location="apache-tomcat-7.0.56/lib/jsp-api.jar" />
+		<pathelement location="apache-tomcat-7.0.56/lib/servlet-api.jar" />
+		<fileset dir="qnc/web/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="all">
+		<antcall target="clean" />
+		<antcall target="git" />
+		<antcall target="compile" />
+		<antcall target="stopServer" />
+		<antcall target="deploy" />
+		<antcall target="startServer" />
+	</target>
+
+	<target name="clean">
+		<delete dir="qnc/web/WEB-INF/classes" />
+	</target>
+
+	<target name="git">
+		<available file="qnc" type="dir" property="qnc.exists" />
+		<exec executable="git" unless:true="${qnc.exists}">
+			<arg line="clone git://git-server/home/git/qnc.git" />
+		</exec>
+		<exec executable="git" if:true="${qnc.exists}" dir="qnc">
+			<arg line="pull origin master" />
+		</exec>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="qnc/web/WEB-INF/classes" />
+		<javac encoding="utf-8" srcdir="qnc/src" destdir="qnc/web/WEB-INF/classes" deprecation="on" fork="true" memoryInitialSize="521m" memoryMaximumSize="1024m" debug="true" target="1.7" source="1.7" classpathref="classpath" />
+		<copy todir="qnc/web/WEB-INF/classes">
+			<fileset dir="qnc/src">
+				<include name="*.properties" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="stopServer">
+		<exec executable="sudo" inputstring="tomcat&#10;">
+			<arg line="-S supervisorctl stop tomcat7" />
+		</exec>
+	</target>
+
+	<target name="deploy">
+		<delete dir="apache-tomcat-7.0.56/webapps/qnc" />
+		<copydir src="qnc/web" dest="apache-tomcat-7.0.56/webapps/qnc" />
+	</target>
+
+	<target name="startServer">
+		<exec executable="sudo" inputstring="tomcat&#10;">
+			<arg line="-S supervisorctl start tomcat7" />
+		</exec>
+	</target>
+</project>
+
+
