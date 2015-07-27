@@ -25,7 +25,7 @@
 	<target name="git">
 	        <available file="wyz" type="dir" property="wyz.exists"/>
 	       	<exec executable="git" unless:true="${wyz.exists}">
-	               	<arg line="clone git://git-server/home/git/wyz.git"/>
+	               	<arg line="clone https://git.oschina.net/nswish/wyz.git"/>
 	        </exec>
 	       	<exec executable="git" if:true="${wyz.exists}" dir="wyz">
 	       		<arg line="pull origin master"/>
